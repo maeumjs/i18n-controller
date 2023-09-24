@@ -1,3 +1,5 @@
 {
+  // english common error message
+  // you can add comments in resource file
   "error": "An error occurred, please try again later"
 }
