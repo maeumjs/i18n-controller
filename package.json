@@ -1,5 +1,5 @@
 {
-  "name": "i18n-controller",
+  "name": "@maeum/i18n-controller",
   "version": "1.0.0",
   "description": "maeum i18n controller",
   "engines": {
@@ -29,19 +29,37 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/imjuni/typescript-cli-boilerplate.git"
+    "url": "git+https://github.com/maeumjs/i18n-controller.git"
   },
-  "keywords": [],
+  "keywords": [
+    "maeum",
+    "i18n",
+    "i18n-controller"
+  ],
   "author": "ByungJoon Lee",
   "license": "MIT",
-  "main": "dist/cjs/cli.cjs",
-  "bin": {
-    "tcb": "dist/cjs/cli.cjs"
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.mjs",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "default": "./dist/cjs/index.cjs",
+        "types": "./dist/types/index.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/index.mjs",
+        "types": "./dist/types/index.d.ts"
+      }
+    }
   },
+  "files": [
+    "dist"
+  ],
   "bugs": {
-    "url": "https://github.com/imjuni/typescript-cli-boilerplate/issues"
+    "url": "https://github.com/maeumjs/i18n-controller.git/issues"
   },
-  "homepage": "https://github.com/imjuni/typescript-cli-boilerplate#readme",
+  "homepage": "https://github.com/maeumjs/i18n-controller.git#readme",
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@tsconfig/node18": "^18.2.2",
