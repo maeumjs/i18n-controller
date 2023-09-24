@@ -25,6 +25,10 @@ describe('I18nContainer', () => {
     });
   });
 
+  it('singletone - bootstrap', async () => {
+    expect(I18nContainer.it.bootstrap).toEqual(true);
+  });
+
   it('getLocale', async () => {
     expect(I18nContainer.it.getLocale('kr')).toMatchObject(new Polyglot({ locale: 'kr' }));
     expect(I18nContainer.it.getLocale()).toMatchObject(new Polyglot({ locale: 'en' }));

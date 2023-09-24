@@ -32,6 +32,7 @@
   },
   "editor.formatOnSave": true,
   "formattingToggle.affects": ["editor.formatOnSave"],
+  "markdown.extension.toc.levels": "2..6",
   "jest.autoRun": {
     "watch": false
     // "onStartup": ["all-tests"],

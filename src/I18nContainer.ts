@@ -6,7 +6,7 @@ import { toArray } from 'my-easy-fp';
 import Polyglot from 'node-polyglot';
 import fs from 'node:fs';
 import path from 'node:path';
-import type { PartialDeep, ReadonlyDeep, ValueOf } from 'type-fest';
+import type { ReadonlyDeep, ValueOf } from 'type-fest';
 
 type TResourceFileContent = { [key: string]: string | TResourceFileContent };
 
@@ -22,11 +22,11 @@ export default class I18nContainer {
   }
 
   static bootstrap<T extends boolean>(
-    nullableOption?: PartialDeep<I18nContainerOption>,
+    nullableOption?: Parameters<typeof getI18nContainerOption>[0],
     async?: T,
   ): T extends true ? Promise<Record<string, Polyglot>> : Record<string, Polyglot>;
   static bootstrap<T extends boolean>(
-    nullableOption?: PartialDeep<I18nContainerOption>,
+    nullableOption?: Parameters<typeof getI18nContainerOption>[0],
     async?: T,
   ): Record<string, Polyglot> | Promise<Record<string, Polyglot>> {
     const option = getI18nContainerOption(nullableOption);
@@ -68,15 +68,33 @@ export default class I18nContainer {
     return locales;
   }
 
+  public static getPoloyglotInfo(
+    resources: TResourceFileContent,
+    option: Pick<I18nContainerOption, 'polyglot'>,
+  ): Polyglot.PolyglotOptions {
+    const { interpolation, ...phrases } = resources;
+
+    const interpolationOption: Polyglot.PolyglotOptions['interpolation'] =
+      typeof interpolation === 'string'
+        ? undefined
+        : {
+            suffix: typeof interpolation?.suffix === 'string' ? interpolation?.suffix : undefined,
+            prefix: typeof interpolation?.prefix === 'string' ? interpolation?.prefix : undefined,
+          };
+
+    return { interpolation: option.polyglot?.interpolation ?? interpolationOption, phrases };
+  }
+
   public static async getLocales(
     languages: string[],
-    option: Pick<I18nContainerOption, 'localeRoot'>,
+    option: Pick<I18nContainerOption, 'localeRoot' | 'polyglot'>,
   ) {
     const locales = await languages.reduce(
       async (prevHandle: Promise<Record<string, Polyglot>>, locale) => {
         const handle = async (prev: Record<string, Polyglot>) => {
           const resources = await I18nContainer.getLocaleResource(option.localeRoot, locale);
-          const polyglot = new Polyglot({ locale, phrases: resources });
+          const polyglotOption = I18nContainer.getPoloyglotInfo(resources, option);
+          const polyglot = new Polyglot({ ...polyglotOption, locale });
           return { ...prev, [locale]: polyglot } satisfies Record<string, Polyglot>;
         };
 
@@ -90,11 +108,12 @@ export default class I18nContainer {
 
   public static getLocalesSync(
     languages: string[],
-    option: Pick<I18nContainerOption, 'localeRoot'>,
+    option: Pick<I18nContainerOption, 'localeRoot' | 'polyglot'>,
   ) {
     const locales = languages.reduce((aggregation: Record<string, Polyglot>, locale) => {
       const resources = I18nContainer.getLocaleResourceSync(option.localeRoot, locale);
-      const polyglot = new Polyglot({ locale, phrases: resources });
+      const polyglotOption = I18nContainer.getPoloyglotInfo(resources, option);
+      const polyglot = new Polyglot({ ...polyglotOption, locale });
       return { ...aggregation, [locale]: polyglot } satisfies Record<string, Polyglot>;
     }, {});
 
@@ -160,10 +179,17 @@ export default class I18nContainer {
 
   #default: Polyglot;
 
+  #bootstrap: boolean = false;
+
   constructor(option: I18nContainerOption, locales: Record<string, Polyglot>) {
     this.#option = option;
     this.#locales = locales;
     this.#default = locales[option.defaultLanguage] as Polyglot;
+    this.#bootstrap = true;
+  }
+
+  public get bootstrap(): boolean {
+    return this.#bootstrap;
   }
 
   public get option(): ReadonlyDeep<I18nContainerOption> {
