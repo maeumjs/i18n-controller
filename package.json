@@ -23,8 +23,9 @@
     "lint-staged": "lint-staged",
     "pub": "pnpm publish --registry http://localhost:8901",
     "unpub": "pnpm unpublish typescript-cli-boilerplate@$npm_package_version --registry http://localhost:8901 --force",
-    "pub:prod": "RELEASE_MODE=true pnpm publish",
+    "pub:prod": "pnpm run bundle && cross-env RELEASE_MODE=true pnpm publish --access=public",
     "dd": "deps-diff md -d prod -d dev --title-list-type '*' --deps-list-type '*' --content-list-type '*'",
+    "prepublishOnly": "node prepublish.cjs",
     "prepare": "husky install"
   },
   "repository": {
