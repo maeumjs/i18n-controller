@@ -10,11 +10,11 @@ import type { ReadonlyDeep, ValueOf } from 'type-fest';
 
 type TResourceFileContent = { [key: string]: string | TResourceFileContent };
 
-export default class I18nContainer {
-  static #it: I18nContainer;
+export default class I18nController {
+  static #it: I18nController;
 
   public static get it() {
-    return I18nContainer.#it;
+    return I18nController.#it;
   }
 
   public static getLanguages(defaultLanguage: string, languages: string[]): string[] {
@@ -22,12 +22,12 @@ export default class I18nContainer {
   }
 
   static bootstrap<T extends boolean>(
-    nullableOption?: Parameters<typeof getI18nContainerOption>[0],
     async?: T,
+    nullableOption?: Parameters<typeof getI18nContainerOption>[0],
   ): T extends true ? Promise<Record<string, Polyglot>> : Record<string, Polyglot>;
   static bootstrap<T extends boolean>(
-    nullableOption?: Parameters<typeof getI18nContainerOption>[0],
     async?: T,
+    nullableOption?: Parameters<typeof getI18nContainerOption>[0],
   ): Record<string, Polyglot> | Promise<Record<string, Polyglot>> {
     const option = getI18nContainerOption(nullableOption);
 
@@ -41,11 +41,11 @@ export default class I18nContainer {
           );
         }
 
-        const locales = await I18nContainer.getLocales(languages, option);
+        const locales = await I18nController.getLocales(languages, option);
 
-        acceptLanguage.languages(I18nContainer.getLanguages(option.defaultLanguage, languages));
+        acceptLanguage.languages(I18nController.getLanguages(option.defaultLanguage, languages));
 
-        I18nContainer.#it = new I18nContainer(option, locales);
+        I18nController.#it = new I18nController(option, locales);
 
         return locales;
       })();
@@ -59,11 +59,11 @@ export default class I18nContainer {
       );
     }
 
-    const locales = I18nContainer.getLocalesSync(languages, option);
+    const locales = I18nController.getLocalesSync(languages, option);
 
-    acceptLanguage.languages(I18nContainer.getLanguages(option.defaultLanguage, languages));
+    acceptLanguage.languages(I18nController.getLanguages(option.defaultLanguage, languages));
 
-    I18nContainer.#it = new I18nContainer(option, locales);
+    I18nController.#it = new I18nController(option, locales);
 
     return locales;
   }
@@ -92,8 +92,8 @@ export default class I18nContainer {
     const locales = await languages.reduce(
       async (prevHandle: Promise<Record<string, Polyglot>>, locale) => {
         const handle = async (prev: Record<string, Polyglot>) => {
-          const resources = await I18nContainer.getLocaleResource(option.localeRoot, locale);
-          const polyglotOption = I18nContainer.getPoloyglotInfo(resources, option);
+          const resources = await I18nController.getLocaleResource(option.localeRoot, locale);
+          const polyglotOption = I18nController.getPoloyglotInfo(resources, option);
           const polyglot = new Polyglot({ ...polyglotOption, locale });
           return { ...prev, [locale]: polyglot } satisfies Record<string, Polyglot>;
         };
@@ -111,8 +111,8 @@ export default class I18nContainer {
     option: Pick<I18nContainerOption, 'localeRoot' | 'polyglot'>,
   ) {
     const locales = languages.reduce((aggregation: Record<string, Polyglot>, locale) => {
-      const resources = I18nContainer.getLocaleResourceSync(option.localeRoot, locale);
-      const polyglotOption = I18nContainer.getPoloyglotInfo(resources, option);
+      const resources = I18nController.getLocaleResourceSync(option.localeRoot, locale);
+      const polyglotOption = I18nController.getPoloyglotInfo(resources, option);
       const polyglot = new Polyglot({ ...polyglotOption, locale });
       return { ...aggregation, [locale]: polyglot } satisfies Record<string, Polyglot>;
     }, {});
@@ -144,7 +144,7 @@ export default class I18nContainer {
           const value = parse(buf.toString()) as TResourceFileContent;
 
           const prevValue = prevData[key] ?? {};
-          const next = I18nContainer.mergeResourceContent(prevValue, value);
+          const next = I18nController.mergeResourceContent(prevValue, value);
 
           return { ...prevData, [key]: next };
         };
@@ -165,7 +165,7 @@ export default class I18nContainer {
       const value = parse(buf.toString()) as TResourceFileContent;
 
       const prevValue = aggregation[key] ?? {};
-      const next = I18nContainer.mergeResourceContent(prevValue, value);
+      const next = I18nController.mergeResourceContent(prevValue, value);
 
       return { ...aggregation, [key]: next };
     }, {});
