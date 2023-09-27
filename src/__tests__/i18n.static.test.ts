@@ -1,10 +1,10 @@
-import I18nContainer from '#/I18nContainer';
+import I18nController from '#/I18nController';
 import Polyglot from 'node-polyglot';
 import { describe, expect, it } from 'vitest';
 
 describe('I18nContainer', () => {
   it('getLocaleResourcesSync', () => {
-    const resource = I18nContainer.getLocaleResourceSync('./resources', 'kr');
+    const resource = I18nController.getLocaleResourceSync('./resources', 'kr');
     expect(resource).toMatchObject({
       common: { error: '오류가 발생했습니다, 잠시 후 다시 시도해 주십시오' },
       pet: { weight: { required: '체중을 입력해주세요' } },
@@ -12,7 +12,7 @@ describe('I18nContainer', () => {
   });
 
   it('getLocaleResources', async () => {
-    const resource = await I18nContainer.getLocaleResource('./resources', 'kr');
+    const resource = await I18nController.getLocaleResource('./resources', 'kr');
     expect(resource).toMatchObject({
       common: { error: '오류가 발생했습니다, 잠시 후 다시 시도해 주십시오' },
       pet: { weight: { required: '체중을 입력해주세요' } },
@@ -20,7 +20,7 @@ describe('I18nContainer', () => {
   });
 
   it('getLocalesSync', () => {
-    const resources = I18nContainer.getLocalesSync(['kr', 'en'], {
+    const resources = I18nController.getLocalesSync(['kr', 'en'], {
       localeRoot: './resources',
     });
 
@@ -31,7 +31,7 @@ describe('I18nContainer', () => {
   });
 
   it('getLocales', async () => {
-    const resources = await I18nContainer.getLocales(['kr', 'en'], { localeRoot: './resources' });
+    const resources = await I18nController.getLocales(['kr', 'en'], { localeRoot: './resources' });
 
     expect(resources).toMatchObject({
       kr: new Polyglot({ locale: 'kr' }),
@@ -40,13 +40,13 @@ describe('I18nContainer', () => {
   });
 
   it('getLanguages', async () => {
-    const r01 = I18nContainer.getLanguages('kr', ['en', 'kr']);
+    const r01 = I18nController.getLanguages('kr', ['en', 'kr']);
     expect(r01).toEqual(['kr', 'en']);
   });
 
   it('getLanguages', async () => {
-    const r01 = I18nContainer.mergeResourceContent('string', { v: 'string' });
-    const r02 = I18nContainer.mergeResourceContent({ k: 'number' }, { v: 'string' });
+    const r01 = I18nController.mergeResourceContent('string', { v: 'string' });
+    const r02 = I18nController.mergeResourceContent({ k: 'number' }, { v: 'string' });
 
     expect(r01).toMatchObject({ v: 'string' });
     expect(r02).toMatchObject({ v: 'string', k: 'number' });
@@ -55,7 +55,7 @@ describe('I18nContainer', () => {
 
 describe('I18nContainer.getPoloyglotInfo', () => {
   it('pass - invalid interpolation option', () => {
-    const r01 = I18nContainer.getPoloyglotInfo(
+    const r01 = I18nController.getPoloyglotInfo(
       {
         interpolation: 'interpolation',
         common: { test: 'hello' },
@@ -67,7 +67,7 @@ describe('I18nContainer.getPoloyglotInfo', () => {
   });
 
   it('pass - invalid interpolation option', () => {
-    const r01 = I18nContainer.getPoloyglotInfo(
+    const r01 = I18nController.getPoloyglotInfo(
       {
         interpolation: 'interpolation',
         common: { test: 'hello' },
@@ -79,7 +79,7 @@ describe('I18nContainer.getPoloyglotInfo', () => {
   });
 
   it('pass - polyglot interpolation option first', () => {
-    const r01 = I18nContainer.getPoloyglotInfo(
+    const r01 = I18nController.getPoloyglotInfo(
       {
         interpolation: {
           suffix: {},
@@ -109,7 +109,7 @@ describe('I18nContainer.getPoloyglotInfo', () => {
   });
 
   it('pass', () => {
-    const r01 = I18nContainer.getPoloyglotInfo(
+    const r01 = I18nController.getPoloyglotInfo(
       {
         interpolation: {
           suffix: 'suffix-1',

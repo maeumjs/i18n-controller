@@ -16,7 +16,7 @@ console.log(`FORMAT: ${process.env.FORMAT}`);
 console.log(`MINIFY: ${process.env.FORMAT}`);
 
 await esbuild.build({
-  entryPoints: ['src/I18nContainer.ts'],
+  entryPoints: ['src/index.ts'],
   target: 'es2021',
   bundle: true,
   sourcemap: true,
