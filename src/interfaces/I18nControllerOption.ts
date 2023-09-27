@@ -1,6 +1,6 @@
 import type Polyglot from 'node-polyglot';
 
-export default interface I18nContainerOption {
+export default interface I18nControllerOption {
   /**
    * Specify the location of the resource file
    * eg. ./resources

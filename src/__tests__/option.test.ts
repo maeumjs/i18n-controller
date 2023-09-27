@@ -1,15 +1,15 @@
-import getI18nContainerOption from '#/getI18nContainerOption';
+import getI18nControllerOption from '#/getI18nContainerOption';
 import { describe, expect, it } from 'vitest';
 
 describe('getI18nContainerOption', () => {
   it('empty option', () => {
     expect(() => {
-      getI18nContainerOption();
+      getI18nControllerOption();
     }).toThrow();
   });
 
   it('option', () => {
-    const r01 = getI18nContainerOption({ localeRoot: 'a' });
+    const r01 = getI18nControllerOption({ localeRoot: 'a' });
 
     expect(r01).toMatchObject({
       localeRoot: 'a',
@@ -48,7 +48,7 @@ describe('getI18nContainerOption', () => {
       },
     };
 
-    const r01 = getI18nContainerOption({
+    const r01 = getI18nControllerOption({
       localeRoot: 'a',
       polyglot: polyglotOption,
     });
