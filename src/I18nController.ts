@@ -17,7 +17,7 @@ export default class I18nController {
     return I18nController.#it;
   }
 
-  public static getLanguages(defaultLanguage: string, languages: string[]): string[] {
+  public static refineLanguages(defaultLanguage: string, languages: string[]): string[] {
     return [defaultLanguage, ...languages.filter((language) => language !== defaultLanguage)];
   }
 
@@ -43,7 +43,7 @@ export default class I18nController {
 
         const locales = await I18nController.getLocales(languages, option);
 
-        acceptLanguage.languages(I18nController.getLanguages(option.defaultLanguage, languages));
+        acceptLanguage.languages(I18nController.refineLanguages(option.defaultLanguage, languages));
 
         I18nController.#it = new I18nController(option, locales);
 
@@ -61,7 +61,7 @@ export default class I18nController {
 
     const locales = I18nController.getLocalesSync(languages, option);
 
-    acceptLanguage.languages(I18nController.getLanguages(option.defaultLanguage, languages));
+    acceptLanguage.languages(I18nController.refineLanguages(option.defaultLanguage, languages));
 
     I18nController.#it = new I18nController(option, locales);
 
@@ -198,6 +198,11 @@ export default class I18nController {
 
   public get locale(): ReadonlyDeep<Record<string, Polyglot>> {
     return this.#locales;
+  }
+
+  public getLanguageFromRequestHeader(languages?: string | string[]): string {
+    const language = Array.isArray(languages) ? languages.join('') : languages;
+    return acceptLanguage.get(language) ?? this.#option.defaultLanguage;
   }
 
   public getLocale(nullableLanguages?: string | string[]): Polyglot {
