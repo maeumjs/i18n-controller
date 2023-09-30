@@ -40,7 +40,7 @@ describe('I18nContainer', () => {
   });
 
   it('getLanguages', async () => {
-    const r01 = I18nController.getLanguages('kr', ['en', 'kr']);
+    const r01 = I18nController.refineLanguages('kr', ['en', 'kr']);
     expect(r01).toEqual(['kr', 'en']);
   });
 
