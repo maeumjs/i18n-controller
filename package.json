@@ -7,8 +7,6 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "dev": "tsx src/cli.ts",
-    "debug": "node --inspect-brk -r ts-node/register src/cli.ts",
     "prebuild": "pnpm run clean",
     "build": "tsc --incremental --noEmit --project tsconfig.json --tsBuildInfoFile .tsbuildinfo",
     "dts": "tsc --project tsconfig.prod.json --declaration --emitDeclarationOnly --declarationDir dist/types/origin",
