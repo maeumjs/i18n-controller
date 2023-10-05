@@ -13,8 +13,14 @@ type TResourceFileContent = { [key: string]: string | TResourceFileContent };
 export default class I18nController {
   static #it: I18nController;
 
+  static #isBootstrap: boolean = false;
+
   public static get it() {
     return I18nController.#it;
+  }
+
+  public static get isBootstrap(): boolean {
+    return I18nController.#isBootstrap;
   }
 
   public static refineLanguages(defaultLanguage: string, languages: string[]): string[] {
@@ -46,6 +52,7 @@ export default class I18nController {
         acceptLanguage.languages(I18nController.refineLanguages(option.defaultLanguage, languages));
 
         I18nController.#it = new I18nController(option, locales);
+        I18nController.#isBootstrap = true;
 
         return locales;
       })();
@@ -64,6 +71,7 @@ export default class I18nController {
     acceptLanguage.languages(I18nController.refineLanguages(option.defaultLanguage, languages));
 
     I18nController.#it = new I18nController(option, locales);
+    I18nController.#isBootstrap = true;
 
     return locales;
   }
