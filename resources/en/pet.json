@@ -1,5 +1,6 @@
 {
   "weight": { 
-    "required": "please enter your weight"
+    "required": "please enter your weight",
+    "result": "your pet weight: %{pet_weight}kg"
   }
 }

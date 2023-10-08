@@ -1,6 +1,8 @@
 import I18nController from '#/I18nController';
+import pt from '#/pt';
+import acceptLanguage from 'accept-language';
 import Polyglot from 'node-polyglot';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 
 describe('I18nContainer', () => {
   beforeAll(async () => {
@@ -20,7 +22,7 @@ describe('I18nContainer', () => {
 
   it('singletone - locale', async () => {
     expect(I18nController.it.locale).toMatchObject({
-      kr: new Polyglot({ locale: 'kr' }),
+      ko: new Polyglot({ locale: 'ko' }),
       en: new Polyglot({ locale: 'en' }),
     });
   });
@@ -30,15 +32,56 @@ describe('I18nContainer', () => {
   });
 
   it('getLocale', async () => {
-    expect(I18nController.it.getLocale('kr')).toMatchObject(new Polyglot({ locale: 'kr' }));
+    expect(I18nController.it.getLocale('ko')).toMatchObject(new Polyglot({ locale: 'ko' }));
     expect(I18nController.it.getLocale()).toMatchObject(new Polyglot({ locale: 'en' }));
     expect(I18nController.it.getLocale([])).toMatchObject(new Polyglot({ locale: 'en' }));
     expect(I18nController.it.getLocale('fr')).toMatchObject(new Polyglot({ locale: 'en' }));
   });
 
   it('t', async () => {
-    expect(I18nController.it.t('kr', 'common.error')).toEqual(
+    expect(I18nController.it.t('ko', 'common.error')).toEqual(
       '오류가 발생했습니다, 잠시 후 다시 시도해 주십시오',
     );
+  });
+
+  it('isBootstrap', async () => {
+    expect(I18nController.isBootstrap).toBeTruthy();
+  });
+
+  it('getLanguageFromRequestHeader', () => {
+    const r01 = I18nController.it.getLanguageFromRequestHeader('en');
+    const r02 = I18nController.it.getLanguageFromRequestHeader(['ko', 'en']);
+    const r03 = I18nController.it.getLanguageFromRequestHeader('fr');
+    const r04 = I18nController.it.getLanguageFromRequestHeader(['fr', 'ge']);
+
+    expect(r01).toEqual('en');
+    expect(r02).toEqual('ko');
+    expect(r03).toEqual('en');
+    expect(r04).toEqual('en');
+
+    vi.spyOn(acceptLanguage, 'get').mockImplementationOnce(() => null);
+
+    const r05 = I18nController.it.getLanguageFromRequestHeader('fr');
+    expect(r05).toEqual('en');
+  });
+
+  it('pt', async () => {
+    expect(pt('ko', 'common.error')).toEqual('오류가 발생했습니다, 잠시 후 다시 시도해 주십시오');
+    expect(pt('common.error')).toEqual('An error occurred, please try again later');
+    expect(pt({ headers: { 'accept-language': 'en' } }, 'common.error')).toEqual(
+      'An error occurred, please try again later',
+    );
+    expect(pt('pet.weight.result', { pet_weight: 30 })).toEqual('your pet weight: 30kg');
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+    expect(pt({ headers: { 'accept-language': 'en' } }, 1 as any)).toEqual('');
+
+    vi.spyOn(I18nController.it, 'getLanguageFromRequestHeader').mockImplementationOnce(() => {
+      throw new Error('error');
+    });
+
+    expect(
+      pt({ headers: { 'accept-language': 'en' } }, 'pet.weight.result', { pet_weight: 30 }),
+    ).toEqual('');
   });
 });

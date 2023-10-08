@@ -209,7 +209,7 @@ export default class I18nController {
   }
 
   public getLanguageFromRequestHeader(languages?: string | string[]): string {
-    const language = Array.isArray(languages) ? languages.join('') : languages;
+    const language = Array.isArray(languages) ? languages.join(', ') : languages;
     return acceptLanguage.get(language) ?? this.#option.defaultLanguage;
   }
 

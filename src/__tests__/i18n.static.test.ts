@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 describe('I18nContainer', () => {
   it('getLocaleResourcesSync', () => {
-    const resource = I18nController.getLocaleResourceSync('./resources', 'kr');
+    const resource = I18nController.getLocaleResourceSync('./resources', 'ko');
     expect(resource).toMatchObject({
       common: { error: '오류가 발생했습니다, 잠시 후 다시 시도해 주십시오' },
       pet: { weight: { required: '체중을 입력해주세요' } },
@@ -12,7 +12,7 @@ describe('I18nContainer', () => {
   });
 
   it('getLocaleResources', async () => {
-    const resource = await I18nController.getLocaleResource('./resources', 'kr');
+    const resource = await I18nController.getLocaleResource('./resources', 'ko');
     expect(resource).toMatchObject({
       common: { error: '오류가 발생했습니다, 잠시 후 다시 시도해 주십시오' },
       pet: { weight: { required: '체중을 입력해주세요' } },
@@ -20,28 +20,28 @@ describe('I18nContainer', () => {
   });
 
   it('getLocalesSync', () => {
-    const resources = I18nController.getLocalesSync(['kr', 'en'], {
+    const resources = I18nController.getLocalesSync(['ko', 'en'], {
       localeRoot: './resources',
     });
 
     expect(resources).toMatchObject({
-      kr: new Polyglot({ locale: 'kr' }),
+      ko: new Polyglot({ locale: 'ko' }),
       en: new Polyglot({ locale: 'en' }),
     });
   });
 
   it('getLocales', async () => {
-    const resources = await I18nController.getLocales(['kr', 'en'], { localeRoot: './resources' });
+    const resources = await I18nController.getLocales(['ko', 'en'], { localeRoot: './resources' });
 
     expect(resources).toMatchObject({
-      kr: new Polyglot({ locale: 'kr' }),
+      ko: new Polyglot({ locale: 'ko' }),
       en: new Polyglot({ locale: 'en' }),
     });
   });
 
   it('getLanguages', async () => {
-    const r01 = I18nController.refineLanguages('kr', ['en', 'kr']);
-    expect(r01).toEqual(['kr', 'en']);
+    const r01 = I18nController.refineLanguages('ko', ['en', 'ko']);
+    expect(r01).toEqual(['ko', 'en']);
   });
 
   it('getLanguages', async () => {

@@ -1,0 +1,6 @@
+{
+  "weight": {
+    "required": "체중을 입력해주세요",
+    "result": "반려동물 체중: %{pet_weight}kg"
+  }
+}
