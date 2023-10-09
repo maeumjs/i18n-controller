@@ -3,6 +3,7 @@ import pt from '#/pt';
 import acceptLanguage from 'accept-language';
 import Polyglot from 'node-polyglot';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { ptu } from '..';
 
 describe('I18nContainer', () => {
   beforeAll(async () => {
@@ -83,5 +84,24 @@ describe('I18nContainer', () => {
     expect(
       pt({ headers: { 'accept-language': 'en' } }, 'pet.weight.result', { pet_weight: 30 }),
     ).toEqual('');
+  });
+
+  it('ptu', async () => {
+    expect(ptu({ headers: { 'accept-language': 'ko' } }, { phrase: 'common.error' })).toEqual(
+      '오류가 발생했습니다, 잠시 후 다시 시도해 주십시오',
+    );
+    expect(
+      ptu(
+        { headers: { 'accept-language': 'ko' } },
+        { phrase: 'pet.weight.result', options: { pet_weight: 30 } },
+      ),
+    ).toEqual('반려동물 체중: 30kg');
+    expect(ptu({ headers: { 'accept-language': 'ko' } }, 1)).toEqual('');
+
+    vi.spyOn(I18nController.it, 'getLanguageFromRequestHeader').mockImplementationOnce(() => {
+      throw new Error('error');
+    });
+
+    expect(ptu({ headers: { 'accept-language': 'ko' } }, { phrase: 'common.error' })).toEqual('');
   });
 });
