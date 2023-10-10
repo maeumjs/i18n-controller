@@ -1,4 +1,5 @@
 import I18nController from '#/I18nController';
+import type I18nParameters from '#/interfaces/I18nParameters';
 import pt from '#/pt';
 import acceptLanguage from 'accept-language';
 import Polyglot from 'node-polyglot';
@@ -87,14 +88,16 @@ describe('I18nContainer', () => {
   });
 
   it('ptu', async () => {
-    expect(ptu({ headers: { 'accept-language': 'ko' } }, { phrase: 'common.error' })).toEqual(
-      '오류가 발생했습니다, 잠시 후 다시 시도해 주십시오',
-    );
     expect(
-      ptu(
-        { headers: { 'accept-language': 'ko' } },
-        { phrase: 'pet.weight.result', options: { pet_weight: 30 } },
-      ),
+      ptu({ headers: { 'accept-language': 'ko' } }, {
+        phrase: 'common.error',
+      } satisfies I18nParameters),
+    ).toEqual('오류가 발생했습니다, 잠시 후 다시 시도해 주십시오');
+    expect(
+      ptu({ headers: { 'accept-language': 'ko' } }, {
+        phrase: 'pet.weight.result',
+        option: { pet_weight: 30 },
+      } satisfies I18nParameters),
     ).toEqual('반려동물 체중: 30kg');
     expect(ptu({ headers: { 'accept-language': 'ko' } }, 1)).toEqual('');
 

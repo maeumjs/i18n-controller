@@ -1,16 +1,16 @@
+import I18nController from '#/I18nController';
+import type I18nParameters from '#/interfaces/I18nParameters';
 import type { FastifyRequest } from 'fastify';
-import type Polyglot from 'node-polyglot';
-import I18nController from './I18nController';
 
 export default function ptu(req: Pick<FastifyRequest, 'headers'>, uo: unknown): string {
   try {
     if (typeof uo === 'object' && uo != null) {
-      const { phrase, options } = uo as { phrase: string; options?: Parameters<Polyglot['t']>[1] };
+      const { phrase, option } = uo as I18nParameters;
 
       return I18nController.it.t(
         I18nController.it.getLanguageFromRequestHeader(req.headers['accept-language']),
         phrase,
-        options,
+        option,
       );
     }
 
