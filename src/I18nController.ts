@@ -1,5 +1,5 @@
-import getI18nControllerOption from '#/getI18nContainerOption';
-import type I18nControllerOption from '#/interfaces/I18nControllerOption';
+import { getI18nControllerOption } from '#/getI18nContainerOption';
+import type { II18nControllerOption } from '#/interfaces/II18nControllerOption';
 import acceptLanguage from 'accept-language';
 import { parse } from 'jsonc-parser';
 import { toArray } from 'my-easy-fp';
@@ -10,7 +10,7 @@ import type { ReadonlyDeep, ValueOf } from 'type-fest';
 
 type TResourceFileContent = { [key: string]: string | TResourceFileContent };
 
-export default class I18nController {
+export class I18nController {
   static #it: I18nController;
 
   static #isBootstrap: boolean = false;
@@ -78,7 +78,7 @@ export default class I18nController {
 
   public static getPoloyglotInfo(
     resources: TResourceFileContent,
-    option: Pick<I18nControllerOption, 'polyglot'>,
+    option: Pick<II18nControllerOption, 'polyglot'>,
   ): Polyglot.PolyglotOptions {
     const { interpolation, ...phrases } = resources;
 
@@ -95,7 +95,7 @@ export default class I18nController {
 
   public static async getLocales(
     languages: string[],
-    option: Pick<I18nControllerOption, 'localeRoot' | 'polyglot'>,
+    option: Pick<II18nControllerOption, 'localeRoot' | 'polyglot'>,
   ) {
     const locales = await languages.reduce(
       async (prevHandle: Promise<Record<string, Polyglot>>, locale) => {
@@ -116,7 +116,7 @@ export default class I18nController {
 
   public static getLocalesSync(
     languages: string[],
-    option: Pick<I18nControllerOption, 'localeRoot' | 'polyglot'>,
+    option: Pick<II18nControllerOption, 'localeRoot' | 'polyglot'>,
   ) {
     const locales = languages.reduce((aggregation: Record<string, Polyglot>, locale) => {
       const resources = I18nController.getLocaleResourceSync(option.localeRoot, locale);
@@ -181,7 +181,7 @@ export default class I18nController {
     return resource;
   }
 
-  #option: I18nControllerOption;
+  #option: II18nControllerOption;
 
   #locales: Record<string, Polyglot>;
 
@@ -189,7 +189,7 @@ export default class I18nController {
 
   #bootstrap: boolean = false;
 
-  constructor(option: I18nControllerOption, locales: Record<string, Polyglot>) {
+  constructor(option: II18nControllerOption, locales: Record<string, Polyglot>) {
     this.#option = option;
     this.#locales = locales;
     this.#default = locales[option.defaultLanguage] as Polyglot;
@@ -200,7 +200,7 @@ export default class I18nController {
     return this.#bootstrap;
   }
 
-  public get option(): ReadonlyDeep<I18nControllerOption> {
+  public get option(): ReadonlyDeep<II18nControllerOption> {
     return this.#option;
   }
 

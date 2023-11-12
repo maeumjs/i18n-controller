@@ -1,4 +1,4 @@
-import getI18nControllerOption from '#/getI18nContainerOption';
+import { getI18nControllerOption } from '#/getI18nContainerOption';
 import { describe, expect, it } from 'vitest';
 
 describe('getI18nContainerOption', () => {

@@ -1,4 +1,4 @@
-import I18nController from '#/I18nController';
+import { I18nController } from '#/I18nController';
 import Polyglot from 'node-polyglot';
 import { describe, expect, it } from 'vitest';
 

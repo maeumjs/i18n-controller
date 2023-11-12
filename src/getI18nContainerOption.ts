@@ -1,8 +1,8 @@
-import type I18nControllerOption from '#/interfaces/I18nControllerOption';
+import type { II18nControllerOption } from '#/interfaces/II18nControllerOption';
 
-export default function getI18nControllerOption(
-  nullableOption?: Partial<Omit<I18nControllerOption, 'polyglot'>> & {
-    polyglot?: Partial<I18nControllerOption['polyglot']>;
+export function getI18nControllerOption(
+  nullableOption?: Partial<Omit<II18nControllerOption, 'polyglot'>> & {
+    polyglot?: Partial<II18nControllerOption['polyglot']>;
   },
 ) {
   const localeRoot = nullableOption?.localeRoot;
@@ -11,7 +11,7 @@ export default function getI18nControllerOption(
     throw new Error('localeRoot value required');
   }
 
-  const option: I18nControllerOption = {
+  const option: II18nControllerOption = {
     localeRoot,
     defaultLanguage: nullableOption?.defaultLanguage ?? 'en',
     polyglot: {
