@@ -1,15 +1,16 @@
 import { I18nController } from '#/I18nController';
-import type { FastifyRequest } from 'fastify';
+import type { IncomingHttpHeaders } from 'http';
+import type { IncomingHttpHeaders as IncomingHttp2Headers } from 'http2';
 import type Polyglot from 'node-polyglot';
 
 export function pt(phrase: string, option?: number | Polyglot.InterpolationOptions): string;
 export function pt(
-  language: string | Pick<FastifyRequest, 'headers'>,
+  language: string | { headers: IncomingHttpHeaders | IncomingHttp2Headers },
   phrase?: string,
   option?: number | Polyglot.InterpolationOptions,
 ): string;
 export function pt(
-  language: string | Pick<FastifyRequest, 'headers'>,
+  language: string | { headers: IncomingHttpHeaders | IncomingHttp2Headers },
   phrase?: string | number | Polyglot.InterpolationOptions,
   option?: number | Polyglot.InterpolationOptions,
 ): string {
