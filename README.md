@@ -7,7 +7,6 @@
 [![NPM version](https://img.shields.io/npm/v/@maeum/i18n-controller.svg?style=flat-square)](https://www.npmjs.com/package/@maeum/i18n-controller)
 [![@maeum/i18n-controller](https://github.com/maeumjs/i18n-controller/actions/workflows/ci.yml/badge.svg?style=flat-square)](https://github.com/maeumjs/i18n-controller/actions/workflows/ci.yml)
 [![License](https://img.shields.io/npm/l/@maeum/i18n-controller.svg?style=flat-square)](https://github.com/maeumjs/i18n-controller/blob/master/LICENSE)
-[![codecov](https://codecov.io/gh/imjuni/i18n-controller/branch/master/graph/badge.svg?token=cYJEAvZUFU)](https://codecov.io/gh/imjuni/i18n-controller)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 The `@maeum/i18n-controller` is a package that helps developer to integreate [node-polyglot](https://airbnb.io/polyglot.js/). Developer can generate a i18n resource via json format file and then use as a singletone class in application(eg. fastify.js or express.js).

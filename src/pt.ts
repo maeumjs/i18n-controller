@@ -1,14 +1,14 @@
-import I18nController from '#/I18nController';
+import { I18nController } from '#/I18nController';
 import type { FastifyRequest } from 'fastify';
 import type Polyglot from 'node-polyglot';
 
-function pt(phrase: string, option?: number | Polyglot.InterpolationOptions): string;
-function pt(
+export function pt(phrase: string, option?: number | Polyglot.InterpolationOptions): string;
+export function pt(
   language: string | Pick<FastifyRequest, 'headers'>,
   phrase?: string,
   option?: number | Polyglot.InterpolationOptions,
 ): string;
-function pt(
+export function pt(
   language: string | Pick<FastifyRequest, 'headers'>,
   phrase?: string | number | Polyglot.InterpolationOptions,
   option?: number | Polyglot.InterpolationOptions,
@@ -43,5 +43,3 @@ function pt(
     return '';
   }
 }
-
-export default pt;
