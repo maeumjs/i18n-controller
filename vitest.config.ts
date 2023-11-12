@@ -12,6 +12,7 @@ export default defineConfig({
     },
     coverage: {
       enabled: true,
+      // @vitest/coverage-istanbul
       // provider: 'istanbul', // or 'v8'
       provider: 'v8', // or 'v8'
       exclude: ['src/common/modules/noop.ts'],
