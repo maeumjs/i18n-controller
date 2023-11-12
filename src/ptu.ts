@@ -1,8 +1,12 @@
 import { I18nController } from '#/I18nController';
 import type { II18nParameters } from '#/interfaces/II18nParameters';
-import type { FastifyRequest } from 'fastify';
+import type { IncomingHttpHeaders } from 'http';
+import type { IncomingHttpHeaders as IncomingHttp2Headers } from 'http2';
 
-export function ptu(req: Pick<FastifyRequest, 'headers'>, uo: unknown): string {
+export function ptu(
+  req: { headers: IncomingHttpHeaders | IncomingHttp2Headers },
+  uo: unknown,
+): string {
   try {
     if (typeof uo === 'object' && uo != null) {
       const { phrase, option } = uo as II18nParameters;
