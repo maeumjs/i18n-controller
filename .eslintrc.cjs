@@ -115,6 +115,7 @@ module.exports = {
       files: ['vitest.config.ts'],
       rules: {
         'import/no-extraneous-dependencies': ['off'],
+        'import/no-default-export': ['off'],
       },
     },
     {
@@ -125,9 +126,9 @@ module.exports = {
       },
     },
     {
-      files: ['vitest.config.ts'],
+      files: ['prepublish.cjs'],
       rules: {
-        'import/no-default-export': ['off'],
+        'no-console': ['off'],
       },
     },
   ],
