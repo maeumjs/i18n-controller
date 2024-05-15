@@ -5,6 +5,7 @@
   "engines": {
     "node": ">=18"
   },
+  "packageManager": "pnpm@9.1.0",
   "scripts": {
     "clean": "rimraf dist",
     "ctix": "ctix build --config .configs/.ctirc",
@@ -22,8 +23,9 @@
     "test": "vitest run --coverage",
     "lint": "eslint --cache .",
     "lint-staged": "lint-staged",
-    "pub": "pnpm run bundle && cross-env RELEASE_MODE=true pnpm publish --registry http://localhost:8901 --no-git-checks",
     "unpub": "pnpm unpublish $npm_package_name@$npm_package_version --registry http://localhost:8901 --force",
+    "prepub": "pnpm unpub",
+    "pub": "pnpm run bundle && cross-env RELEASE_MODE=true pnpm publish --registry http://localhost:8901 --no-git-checks",
     "pub:prod": "pnpm run bundle && cross-env RELEASE_MODE=true pnpm publish --access=public",
     "dd": "deps-diff md -d prod -d dev --title-list-type 'm' --deps-list-type 'm' --content-list-type 'm'",
     "prepublishOnly": "node prepublish.cjs",
@@ -69,11 +71,11 @@
     "@types/node-polyglot": "^2.4.5",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
-    "@vitest/coverage-v8": "^0.34.6",
+    "@vitest/coverage-v8": "^1.6.0",
     "cross-env": "^7.0.3",
-    "ctix": "^2.3.0",
+    "ctix": "^2.4.4",
     "deps-diff": "^1.0.2",
-    "esbuild": "0.19.5",
+    "esbuild": "0.21.2",
     "eslint": "^8.54.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
@@ -84,7 +86,6 @@
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-prettier": "^5.0.1",
     "husky": "^8.0.3",
-    "jest": "^29.7.0",
     "lint-staged": "^15.1.0",
     "npm-run-all": "^4.1.5",
     "prettier-eslint": "^16.1.2",
@@ -98,13 +99,14 @@
     "tsconfig-paths": "^4.2.0",
     "tslib": "^2.5.2",
     "typescript": "^5.2.2",
-    "vite-tsconfig-paths": "^4.2.1",
-    "vitest": "^0.34.6"
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
+    "@maeum/tools": "^1.5.0",
     "accept-language": "^3.0.18",
     "jsonc-parser": "^3.2.0",
-    "my-easy-fp": "^0.21.0",
+    "my-easy-fp": "^0.22.0",
     "node-polyglot": "^2.5.0",
     "type-fest": "^4.8.1"
   },
