@@ -1,60 +1,71 @@
-import { I18nController } from '#/I18nController';
+import type { I18nContainer } from '#/I18nContainer';
+import { container } from '#/__tests__/container';
 import type { II18nParameters } from '#/interfaces/II18nParameters';
-import { pt } from '#/pt';
-import { ptu } from '#/ptu';
+import { makeAsyncI18nContainer } from '#/makeAsyncI18nContainer';
+import { $YMBOL_KEY_I18N_CONTROLLER } from '#/symbols/SYMBOL_KEY_I18N_CONTROLLER';
 import acceptLanguage from 'accept-language';
 import Polyglot from 'node-polyglot';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 
 describe('I18nContainer', () => {
   beforeAll(async () => {
-    await I18nController.bootstrap(true, { localeRoot: './resources' });
+    await makeAsyncI18nContainer(container, { localeRoot: './resources' });
   });
 
-  it('singletone', async () => {
-    expect(I18nController.it).toBeTruthy();
+  it('singletone - instance', async () => {
+    const i18n = container.resolve($YMBOL_KEY_I18N_CONTROLLER);
+    expect(i18n).toBeTruthy();
   });
 
-  it('singletone - option', async () => {
-    expect(I18nController.it.option).toMatchObject({
+  it('singletone - options', async () => {
+    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+    expect(i18n.options).toMatchObject({
       localeRoot: './resources',
       defaultLanguage: 'en',
     });
   });
 
-  it('singletone - locale', async () => {
-    expect(I18nController.it.locale).toMatchObject({
-      ko: new Polyglot({ locale: 'ko' }),
-      en: new Polyglot({ locale: 'en' }),
-    });
+  it('singletone - bootstarp chekc', async () => {
+    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+    expect(i18n.bootstrap).toBeTruthy();
   });
 
-  it('singletone - bootstrap', async () => {
-    expect(I18nController.it.bootstrap).toEqual(true);
+  it('singletone - locale', async () => {
+    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+
+    expect(i18n.locales).toMatchObject(
+      new Map([
+        ['ko', new Polyglot({ locale: 'ko' })],
+        ['en', new Polyglot({ locale: 'en' })],
+      ]),
+    );
   });
 
   it('getLocale', async () => {
-    expect(I18nController.it.getLocale('ko')).toMatchObject(new Polyglot({ locale: 'ko' }));
-    expect(I18nController.it.getLocale()).toMatchObject(new Polyglot({ locale: 'en' }));
-    expect(I18nController.it.getLocale([])).toMatchObject(new Polyglot({ locale: 'en' }));
-    expect(I18nController.it.getLocale('fr')).toMatchObject(new Polyglot({ locale: 'en' }));
+    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+
+    expect(i18n.getLocale('ko')).toMatchObject(new Polyglot({ locale: 'ko' }));
+    expect(i18n.getLocale()).toMatchObject(new Polyglot({ locale: 'en' }));
+    expect(i18n.getLocale([])).toMatchObject(new Polyglot({ locale: 'en' }));
+    expect(i18n.getLocale(['fr'])).toMatchObject(new Polyglot({ locale: 'en' }));
+    expect(i18n.getLocale('fr')).toMatchObject(new Polyglot({ locale: 'en' }));
   });
 
   it('t', async () => {
-    expect(I18nController.it.t('ko', 'common.error')).toEqual(
+    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+
+    expect(i18n.t('ko', 'common.error')).toEqual(
       '오류가 발생했습니다, 잠시 후 다시 시도해 주십시오',
     );
   });
 
-  it('isBootstrap', async () => {
-    expect(I18nController.isBootstrap).toBeTruthy();
-  });
-
   it('getLanguageFromRequestHeader', () => {
-    const r01 = I18nController.it.getLanguageFromRequestHeader('en');
-    const r02 = I18nController.it.getLanguageFromRequestHeader(['ko', 'en']);
-    const r03 = I18nController.it.getLanguageFromRequestHeader('fr');
-    const r04 = I18nController.it.getLanguageFromRequestHeader(['fr', 'ge']);
+    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+
+    const r01 = i18n.getLanguageFromRequestHeader('en');
+    const r02 = i18n.getLanguageFromRequestHeader(['ko', 'en']);
+    const r03 = i18n.getLanguageFromRequestHeader('fr');
+    const r04 = i18n.getLanguageFromRequestHeader(['fr', 'ge']);
 
     expect(r01).toEqual('en');
     expect(r02).toEqual('ko');
@@ -63,48 +74,58 @@ describe('I18nContainer', () => {
 
     vi.spyOn(acceptLanguage, 'get').mockImplementationOnce(() => null);
 
-    const r05 = I18nController.it.getLanguageFromRequestHeader('fr');
+    const r05 = i18n.getLanguageFromRequestHeader('fr');
     expect(r05).toEqual('en');
   });
 
   it('pt', async () => {
-    expect(pt('ko', 'common.error')).toEqual('오류가 발생했습니다, 잠시 후 다시 시도해 주십시오');
-    expect(pt('common.error')).toEqual('An error occurred, please try again later');
-    expect(pt({ headers: { 'accept-language': 'en' } }, 'common.error')).toEqual(
+    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+
+    expect(i18n.pt('ko', 'common.error')).toEqual(
+      '오류가 발생했습니다, 잠시 후 다시 시도해 주십시오',
+    );
+    expect(i18n.pt('common.error')).toEqual('An error occurred, please try again later');
+    expect(i18n.pt({ headers: { 'accept-language': 'en' } }, 'common.error')).toEqual(
       'An error occurred, please try again later',
     );
-    expect(pt('pet.weight.result', { pet_weight: 30 })).toEqual('your pet weight: 30kg');
+    expect(i18n.pt('pet.weight.result', { pet_weight: 30 })).toEqual('your pet weight: 30kg');
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
-    expect(pt({ headers: { 'accept-language': 'en' } }, 1 as any)).toEqual('');
+    expect(i18n.pt({ headers: { 'accept-language': 'en' } }, 1 as any)).toEqual('');
 
-    vi.spyOn(I18nController.it, 'getLanguageFromRequestHeader').mockImplementationOnce(() => {
+    vi.spyOn(i18n, 'getLanguageFromRequestHeader').mockImplementationOnce(() => {
       throw new Error('error');
     });
 
     expect(
-      pt({ headers: { 'accept-language': 'en' } }, 'pet.weight.result', { pet_weight: 30 }),
+      i18n.pt({ headers: { 'accept-language': 'en' } }, 'pet.weight.result', { pet_weight: 30 }),
     ).toEqual('');
   });
 
   it('ptu', async () => {
+    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+
     expect(
-      ptu({ headers: { 'accept-language': 'ko' } }, {
+      i18n.ptu({ headers: { 'accept-language': 'ko' } }, {
         phrase: 'common.error',
       } satisfies II18nParameters),
     ).toEqual('오류가 발생했습니다, 잠시 후 다시 시도해 주십시오');
     expect(
-      ptu({ headers: { 'accept-language': 'ko' } }, {
+      i18n.ptu({ headers: { 'accept-language': 'ko' } }, {
         phrase: 'pet.weight.result',
         option: { pet_weight: 30 },
       } satisfies II18nParameters),
     ).toEqual('반려동물 체중: 30kg');
-    expect(ptu({ headers: { 'accept-language': 'ko' } }, 1)).toEqual('');
 
-    vi.spyOn(I18nController.it, 'getLanguageFromRequestHeader').mockImplementationOnce(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+    expect(i18n.ptu({ headers: { 'accept-language': 'ko' } }, 1 as any)).toEqual('');
+
+    vi.spyOn(i18n, 'getLanguageFromRequestHeader').mockImplementationOnce(() => {
       throw new Error('error');
     });
 
-    expect(ptu({ headers: { 'accept-language': 'ko' } }, { phrase: 'common.error' })).toEqual('');
+    expect(i18n.ptu({ headers: { 'accept-language': 'ko' } }, { phrase: 'common.error' })).toEqual(
+      '',
+    );
   });
 });
