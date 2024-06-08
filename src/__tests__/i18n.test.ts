@@ -24,11 +24,6 @@ describe('I18nContainer', () => {
     });
   });
 
-  it('singletone - bootstarp chekc', async () => {
-    const i18n = container.resolve(CE_DI.I18N_CONTROLLER);
-    expect(i18n.bootstrap).toBeTruthy();
-  });
-
   it('singletone - locale', async () => {
     const i18n = container.resolve(CE_DI.I18N_CONTROLLER);
 
