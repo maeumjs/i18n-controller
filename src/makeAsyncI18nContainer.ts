@@ -1,7 +1,7 @@
+import { CE_DI } from '#/di/CE_DI';
 import { getI18nContainerOption } from '#/getI18nContainerOption';
 import { I18nContainer } from '#/I18nContainer';
 import { getAsyncLocales } from '#/modules/getAsyncLocales';
-import { $YMBOL_KEY_I18N_CONTROLLER } from '#/symbols/SYMBOL_KEY_I18N_CONTROLLER';
 import type { IClassContainer } from '@maeum/tools';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -22,7 +22,7 @@ export async function makeAsyncI18nContainer(
   const locales = await getAsyncLocales(languages, option);
   const i18n = new I18nContainer(option, locales);
 
-  container.register($YMBOL_KEY_I18N_CONTROLLER, i18n);
+  container.register(CE_DI.I18N_CONTROLLER, i18n);
 
   return i18n;
 }
