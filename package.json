@@ -44,10 +44,12 @@
   "exports": {
     ".": {
       "require": {
+        "require": "./dist/cjs/index.cjs",
         "default": "./dist/cjs/index.cjs",
         "types": "./dist/types/index.d.ts"
       },
       "import": {
+        "import": "./dist/esm/index.mjs",
         "default": "./dist/esm/index.mjs",
         "types": "./dist/types/index.d.ts"
       }
