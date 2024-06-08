@@ -1,6 +1,6 @@
 {
   "name": "@maeum/i18n-controller",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "maeum i18n controller",
   "engines": {
     "node": ">=18"
