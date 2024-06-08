@@ -1,4 +1,5 @@
-/* v8 ignore next 10 */
+/** @ctix-declaration */
+
 import type { I18nContainer } from '#/I18nContainer';
 import type { CE_DI } from '#/di/CE_DI';
 import '@maeum/tools';
