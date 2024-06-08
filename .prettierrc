@@ -5,7 +5,9 @@
   "arrowParens": "always",
   "parser": "typescript",
   "endOfLine": "lf",
-  "plugins": ["prettier-plugin-organize-imports"],
+  "plugins": [
+    "prettier-plugin-organize-imports"
+  ],
   "overrides": [
     {
       "files": "*.md",
@@ -23,7 +25,8 @@
       "files": [
         ".vscode/launch.json",
         ".vscode/settings.json",
-        ".swcrc",
+        "package.json",
+        "tsconfig.dts.json",
         "tsconfig.eslint.json",
         "tsconfig.prod.json",
         "tsconfig.json"

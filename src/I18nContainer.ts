@@ -14,8 +14,6 @@ export class I18nContainer {
 
   #default: Polyglot;
 
-  #bootstrap: boolean = false;
-
   constructor(options: II18nContainerOptions, locales: Map<string, Polyglot>) {
     this.#options = options;
     this.#locales = locales;
@@ -23,15 +21,10 @@ export class I18nContainer {
       locales.get(options.defaultLanguage),
       new Error(`no default language resources: ${options.defaultLanguage}`),
     );
-    this.#bootstrap = true;
 
     acceptLanguage.languages(
       settify([options.defaultLanguage, ...Array.from(this.#locales.keys())]),
     );
-  }
-
-  public get bootstrap(): boolean {
-    return this.#bootstrap;
   }
 
   public get options(): ReadonlyDeep<II18nContainerOptions> {
