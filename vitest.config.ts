@@ -15,7 +15,7 @@ export default defineConfig({
       // @vitest/coverage-istanbul
       // provider: 'istanbul', // or 'v8'
       provider: 'v8', // or 'v8'
-      exclude: ['src/common/modules/noop.ts'],
+      exclude: ['src/common/modules/noop.ts', 'src/di/declarations.ts'],
       include: ['**/src/**'],
     },
   },

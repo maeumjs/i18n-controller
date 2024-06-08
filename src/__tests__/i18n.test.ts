@@ -1,8 +1,7 @@
-import type { I18nContainer } from '#/I18nContainer';
 import { container } from '#/__tests__/container';
+import { CE_DI } from '#/di/CE_DI';
 import type { II18nParameters } from '#/interfaces/II18nParameters';
 import { makeAsyncI18nContainer } from '#/makeAsyncI18nContainer';
-import { $YMBOL_KEY_I18N_CONTROLLER } from '#/symbols/SYMBOL_KEY_I18N_CONTROLLER';
 import acceptLanguage from 'accept-language';
 import Polyglot from 'node-polyglot';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
@@ -13,12 +12,12 @@ describe('I18nContainer', () => {
   });
 
   it('singletone - instance', async () => {
-    const i18n = container.resolve($YMBOL_KEY_I18N_CONTROLLER);
+    const i18n = container.resolve(CE_DI.I18N_CONTROLLER);
     expect(i18n).toBeTruthy();
   });
 
   it('singletone - options', async () => {
-    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+    const i18n = container.resolve(CE_DI.I18N_CONTROLLER);
     expect(i18n.options).toMatchObject({
       localeRoot: './resources',
       defaultLanguage: 'en',
@@ -26,12 +25,12 @@ describe('I18nContainer', () => {
   });
 
   it('singletone - bootstarp chekc', async () => {
-    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+    const i18n = container.resolve(CE_DI.I18N_CONTROLLER);
     expect(i18n.bootstrap).toBeTruthy();
   });
 
   it('singletone - locale', async () => {
-    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+    const i18n = container.resolve(CE_DI.I18N_CONTROLLER);
 
     expect(i18n.locales).toMatchObject(
       new Map([
@@ -42,7 +41,7 @@ describe('I18nContainer', () => {
   });
 
   it('getLocale', async () => {
-    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+    const i18n = container.resolve(CE_DI.I18N_CONTROLLER);
 
     expect(i18n.getLocale('ko')).toMatchObject(new Polyglot({ locale: 'ko' }));
     expect(i18n.getLocale()).toMatchObject(new Polyglot({ locale: 'en' }));
@@ -52,7 +51,7 @@ describe('I18nContainer', () => {
   });
 
   it('t', async () => {
-    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+    const i18n = container.resolve(CE_DI.I18N_CONTROLLER);
 
     expect(i18n.t('ko', 'common.error')).toEqual(
       '오류가 발생했습니다, 잠시 후 다시 시도해 주십시오',
@@ -60,7 +59,7 @@ describe('I18nContainer', () => {
   });
 
   it('getLanguageFromRequestHeader', () => {
-    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+    const i18n = container.resolve(CE_DI.I18N_CONTROLLER);
 
     const r01 = i18n.getLanguageFromRequestHeader('en');
     const r02 = i18n.getLanguageFromRequestHeader(['ko', 'en']);
@@ -79,7 +78,7 @@ describe('I18nContainer', () => {
   });
 
   it('pt', async () => {
-    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+    const i18n = container.resolve(CE_DI.I18N_CONTROLLER);
 
     expect(i18n.pt('ko', 'common.error')).toEqual(
       '오류가 발생했습니다, 잠시 후 다시 시도해 주십시오',
@@ -103,7 +102,7 @@ describe('I18nContainer', () => {
   });
 
   it('ptu', async () => {
-    const i18n = container.resolve<I18nContainer>($YMBOL_KEY_I18N_CONTROLLER);
+    const i18n = container.resolve(CE_DI.I18N_CONTROLLER);
 
     expect(
       i18n.ptu({ headers: { 'accept-language': 'ko' } }, {
